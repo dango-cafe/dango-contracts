@@ -579,6 +579,8 @@ interface IDebtToken {
 }
 
 interface IProxy {
+    function owner() external view returns (address);
+
     function addAuth(address _auth) external;
 
     function removeAuth(address _auth) external;

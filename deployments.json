@@ -1,7 +1,7 @@
 {
     "polygon": {
         "DangoProxyFactory": "0xaE8fA9AF7D17Fab84638d1dc794c1bc5Fe516BaA",
-        "DangoReceiver": "0xc18e9BF88706f787DEa684cc16E0BC0d7C281d4b",
-        "DangoExecutor": "0x77C72180edd90E657704706C03890922062eA092"
+        "DangoReceiver": "0x11D4e37f4b904FF2082375EA3720E4aA95e8760C",
+        "DangoExecutor": "0x8342977D6B8c07Ef5d6504777eF373349B6D54Cc"
     }
 }

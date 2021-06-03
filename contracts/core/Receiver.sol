@@ -41,9 +41,7 @@ contract DangoReceiver is FlashLoanReceiverBase, Ownable {
     address internal constant ethAddr = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
     address internal constant wethAddr = 0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270;
 
-    uint256 public fee;
     address public immutable executor;
-    address public feeCollector;
     IProtocolDataProvider public immutable dataProvider;
 
     mapping (address => bool) public whitelist;
@@ -56,9 +54,7 @@ contract DangoReceiver is FlashLoanReceiverBase, Ownable {
         address _feeCollector
     ) FlashLoanReceiverBase(_addressProvider) {
         executor = _executor;
-        fee = _fee;
         dataProvider = IProtocolDataProvider(_dataProvider);
-        feeCollector = _feeCollector;
     }
 
     function addAccess(address trader) public onlyOwner {
@@ -71,16 +67,6 @@ contract DangoReceiver is FlashLoanReceiverBase, Ownable {
         require(whitelist[trader], "not-whitelisted");
 
         whitelist[trader] = false;
-    }
-
-    function changeFee(uint256 newFee) external onlyOwner {
-        require(newFee <= 1e17, "fees-too-high");
-        fee = newFee;
-    }
-
-    function changeFeeCollector(address newCollector) external onlyOwner {
-        require(newCollector != address(0x0));
-        feeCollector = newCollector;
     }
 
     function wmul(uint x, uint y) internal pure returns (uint z) {
@@ -128,9 +114,6 @@ contract DangoReceiver is FlashLoanReceiverBase, Ownable {
             uint256 finalBal = collateral.balanceOf(address(this));
             uint256 received = finalBal.sub(initBal);
             require(received > 0, "no-trade-happened");
-            uint256 feeAmt = wmul(received, fee);
-
-            collateral.safeTransfer(feeCollector, feeAmt);
         }
 
         uint256 totalAmount = collateral.balanceOf(address(this));
@@ -167,9 +150,6 @@ contract DangoReceiver is FlashLoanReceiverBase, Ownable {
             uint256 finalDebtBal = IERC20(asset).balanceOf(address(this));
             uint256 received = finalDebtBal.sub(initBal);
             require(received > 0, "no-trade-happened");
-            uint256 feeAmt = wmul(received, fee);
-
-            IERC20(asset).safeTransfer(feeCollector, feeAmt);
         }
 
         uint256 finalDebtRepaying;

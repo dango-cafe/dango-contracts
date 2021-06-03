@@ -11,9 +11,10 @@ import {
     IProtocolDataProvider,
     ILendingPoolAddressesProvider
 } from "../utils/Interfaces.sol";
-import { SafeERC20, DataTypes } from "../utils/Libraries.sol";
+import { SafeMath, SafeERC20, DataTypes } from "../utils/Libraries.sol";
 
 contract DangoExecutor {
+    using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
     address public immutable receiver;
@@ -47,11 +48,13 @@ contract DangoExecutor {
 
         (, address stableDebtToken, address variableDebtToken) = dataProvider.getReserveTokensAddresses(data.debtAsset);
 
+        uint256 premium = data.debtAmount.mul(9).div(10000);
+        uint256 debtWithPremium = data.debtAmount.add(premium);
+
         if (data.debtMode == 2) {
-            IDebtToken(variableDebtToken).approveDelegation(receiver, data.debtAmount);
+            IDebtToken(variableDebtToken).approveDelegation(receiver, debtWithPremium);
         } else {
-            require(stableDebtToken != address(0), "invalid-stable-debt-token");
-            IDebtToken(stableDebtToken).approveDelegation(receiver, data.debtAmount);
+            IDebtToken(stableDebtToken).approveDelegation(receiver, debtWithPremium);
         }
 
         data.collateralAsset = address(collateral);

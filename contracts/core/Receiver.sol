@@ -99,7 +99,7 @@ contract DangoReceiver is FlashLoanReceiverBase, Ownable {
         require(data.debtAmount == amount, "data-mismatch");
 
         IERC20 collateral = IERC20(data.collateralAsset);
-        collateral.safeTransferFrom(msg.sender, address(this), data.collateralAmount);
+        collateral.safeTransferFrom(initiator, address(this), data.collateralAmount);
 
         if (data.collateralAsset != data.debtAsset) {
             require(whitelist[data.tradeTarget], "not-whitelisted");

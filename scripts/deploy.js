@@ -25,6 +25,8 @@ async function main() {
   const executor = await Executor.deploy(receiver.address, aaveAddrProvider, aaveDataProvider)
   await executor.deployed()
 
+  await receiver.addAccess('0xdef1c0ded9bec7f1a1670819833240f027b25eff')
+
   console.log('DangoReceiver: ', receiver.address)
   console.log('DangoExecutor: ', executor.address)
 

@@ -18,7 +18,7 @@ async function main() {
   const executorAddress = '0x' + hre.ethers.utils.keccak256(RLP.encode([deployerAddress, txCount])).slice(12).substring(14)
 
   const Receiver = await hre.ethers.getContractFactory("DangoReceiver")
-  const receiver = await Receiver.deploy(aaveAddrProvider, executorAddress)
+  const receiver = await Receiver.deploy(aaveAddrProvider, executorAddress, aaveDataProvider)
   await receiver.deployed();
 
   const Executor = await hre.ethers.getContractFactory("DangoExecutor")

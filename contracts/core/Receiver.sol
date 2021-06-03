@@ -49,9 +49,7 @@ contract DangoReceiver is FlashLoanReceiverBase, Ownable {
     constructor(
         ILendingPoolAddressesProvider _addressProvider,
         address _executor,
-        uint256 _fee,
-        address _dataProvider,
-        address _feeCollector
+        address _dataProvider
     ) FlashLoanReceiverBase(_addressProvider) {
         executor = _executor;
         dataProvider = IProtocolDataProvider(_dataProvider);

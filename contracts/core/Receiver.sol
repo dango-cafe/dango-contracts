@@ -139,13 +139,13 @@ contract DangoReceiver is FlashLoanReceiverBase, Ownable {
 
         if (asset != data.debtAsset) {
             require(whitelist[data.tradeTarget], "not-whitelisted");
-            uint256 initBal = IERC20(asset).balanceOf(address(this));
+            uint256 initBal = IERC20(data.debtAsset).balanceOf(address(this));
 
             IERC20(asset).safeApprove(address(data.tradeTarget), amount);
             (bool success, ) = data.tradeTarget.call(data.tradeData);
             if (!success) revert("trade-failed");
 
-            uint256 finalDebtBal = IERC20(asset).balanceOf(address(this));
+            uint256 finalDebtBal = IERC20(data.debtAsset).balanceOf(address(this));
             uint256 received = finalDebtBal.sub(initBal);
             require(received > 0, "no-trade-happened");
         }

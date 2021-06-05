@@ -155,14 +155,14 @@ contract DangoReceiver is FlashLoanReceiverBase, Ownable {
         {
             uint256 debtAssetBal = IERC20(data.debtAsset).balanceOf(address(this));
             (,uint stableDebt, uint256 varDebt,,,,,,) = dataProvider.getUserReserveData(data.debtAsset, initiator);
-            uint256 maxDebt = data.debtMode == 1 ? varDebt : stableDebt;
+            uint256 maxDebt = data.debtMode == 2 ? varDebt : stableDebt;
             bool isOverpay = debtAssetBal >= maxDebt;
             uint256 debtRepaying = isOverpay ? type(uint256).max : debtAssetBal;
             require(debtRepaying >= data.debtAmount, "trade-failed");
             finalDebtRepaying = isOverpay ? maxDebt : debtAssetBal;
 
             IERC20(data.debtAsset).safeApprove(address(LENDING_POOL), finalDebtRepaying);
-            LENDING_POOL.repay(data.debtAsset, debtRepaying, data.debtMode, initiator);
+            LENDING_POOL.repay(data.debtAsset, finalDebtRepaying, data.debtMode, initiator);
             if (isOverpay) {
                 address owner = IProxy(initiator).owner();
                 IERC20(data.debtAsset).safeTransfer(owner, debtAssetBal.sub(maxDebt));

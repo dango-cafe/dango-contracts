@@ -102,7 +102,7 @@ contract AaveExecutor {
             (finalAmt, , , , , , , ,) = dataProvider.getUserReserveData(address(collateral), address(this));
         }
 
-        lendingPool.withdraw(address(this), finalAmt, address(this));
+        lendingPool.withdraw(address(collateral), finalAmt, address(this));
 
         if (isEth) {
             collateral.safeApprove(wethAddr, finalAmt);

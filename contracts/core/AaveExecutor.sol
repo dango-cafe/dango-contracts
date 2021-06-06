@@ -105,7 +105,6 @@ contract AaveExecutor {
         lendingPool.withdraw(address(collateral), finalAmt, address(this));
 
         if (isEth) {
-            collateral.safeApprove(wethAddr, finalAmt);
             IWETH(wethAddr).withdraw(finalAmt);
             payable(to).transfer(finalAmt);
         } else {
@@ -127,7 +126,6 @@ contract AaveExecutor {
         lendingPool.borrow(address(debt), amt, rateMode, 0, address(this));
 
         if (isEth) {
-            debt.safeApprove(wethAddr, amt);
             IWETH(wethAddr).withdraw(amt);
             payable(to).transfer(amt);
         } else {

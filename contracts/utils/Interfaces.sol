@@ -589,3 +589,9 @@ interface IProxy {
 
     function multiExecute(address[] memory _targets, bytes[] memory _datas) external payable;
 }
+
+interface ITokenIncentives {
+    function claimRewards(address[] calldata assets, uint256 amount, address to) external;
+
+    function getRewardsBalance(address[] calldata assets, address user) external view returns (uint256);
+}
